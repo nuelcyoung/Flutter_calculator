@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +9,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        // Application name
-        title: 'Flutter Hello World',
-        // Application theme data, you can set the colors for the application as
-        // you want
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -23,313 +18,158 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Widget _buildCard() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      InkWell(
-          child: Container(
-            width: 80,
-            height: 80,
-            child: const Text('1',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold)),
-            color: Colors.blue,
-          ),
-          onTap: () {
-            print("1");
-          }),
-      SizedBox(width: 20),
-      Container(
-        width: 80,
-        height: 80,
-        child: const Text('2',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 50,
-                fontWeight: FontWeight.bold)),
-        color: Color(0xff614906),
-      ),
-      SizedBox(width: 20),
-      Container(
-        width: 80,
-        height: 80,
-        child: const Text('3',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 50,
-                fontWeight: FontWeight.bold)),
-        color: Color(0xff0f5229),
-      )
-    ],
-  );
-}
-
-class MyHomePage extends StatelessWidget {
-  final String title;
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          // The title text which will be shown on the action bar
-          title: Text(title),
-        ),
-        body: _buildCard());
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String output = '0';
+  String _output = '0';
+  dynamic num1 = 0.0;
+  dynamic num2 = 0.0;
+  String operand = "";
+  buttonPressed(String buttonText) {
+    if (buttonText == '<') {
+      _output = "0";
+      num1 = 0;
+      num2 = 0;
+      operand = "";
+    } else if (buttonText == '+' ||
+        buttonText == '-' ||
+        buttonText == 'X' ||
+        buttonText == '/') {
+      num1 = double.parse(output);
+      operand = buttonText;
+      _output = "0";
+    } else if (buttonText == '=') {
+      num2 = double.parse(output);
+      if (operand == '+') {
+        _output = (num1 + num2).toString();
+      }
+      if (operand == '-') {
+        _output = (num1 - num2).toString();
+      }
+      if (operand == 'X') {
+        _output = (num1 * num2).toString();
+      }
+      if (operand == '/') {
+        _output = (num1 / num2).toString();
+      }
+      num1 = 0.0;
+      num2 = 0.0;
+      operand = "";
+    } else {
+      _output = _output + buttonText;
+    }
+    setState(() {
+      output = double.parse(_output).toString();
+    });
   }
-}
 
-class Home extends StatelessWidget {
   @override
+  Widget buildButton(String buttonText, int color, double width) {
+    return InkWell(
+        child: Container(
+          width: width,
+          height: 70,
+          child: Text(buttonText,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Color(
+                    color,
+                  ),
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold)),
+          //color: Colors.blue,
+        ),
+        onTap: () {
+          buttonPressed(buttonText);
+        });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Calculator'),
+        title: Text('NCalculator'),
       ),
       body: Column(
         children: [
           Container(
             padding: EdgeInsets.all(5),
             alignment: Alignment.centerRight,
-            color: Colors.grey,
-            width: 400,
-            height: 60,
+            width: 380,
+            height: 80,
+            decoration: BoxDecoration(
+              //color: const Color(0xff5984ab),
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Text(
-              '0',
-              style: TextStyle(fontSize: 40),
+              output,
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              InkWell(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    child: const Text('1',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold)),
-                    color: Colors.blue,
-                  ),
-                  onTap: () {
-                    print("1");
-                  }),
+              buildButton("AC", 0xffcdb4db, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('2',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff614906),
-              ),
+              buildButton("%", 0xffcdb4db, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('3',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff0f5229),
-              )
+              buildButton("/", 0xffcdb4db, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('4',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff1a6627),
-              ),
+              buildButton("4", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('5',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff3d2998),
-              ),
+              buildButton("5", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('6',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff6d1d3c),
-              )
+              buildButton("6", 0xff000000, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('7',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff250b6e),
-              ),
+              buildButton("7", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('8',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff729073),
-              ),
+              buildButton("8", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('9',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff8178e7),
-              )
+              buildButton("9", 0xff000000, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('0',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff250b6e),
-              ),
+              buildButton("0", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('+',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff729073),
-              ),
+              buildButton("+", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('*',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xffc9cb31),
-              )
+              buildButton("X", 0xff000000, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('-',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff250b6e),
-              ),
+              buildButton("/", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff729073),
-              ),
+              buildButton("<", 0xff000000, 70),
               SizedBox(width: 20),
-              Container(
-                width: 80,
-                height: 80,
-                child: const Text('/',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff98217a),
-              )
+              buildButton("-", 0xff000000, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: 335,
-                height: 50,
-                child: const Text('=',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold)),
-                color: Color(0xff729073),
-              ),
-            ],
+            children: [buildButton("=", 0xff8338ec, 200)],
           ),
         ],
       ),
