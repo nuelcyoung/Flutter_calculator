@@ -9,12 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        // A widget which will be started on application startup
-        debugShowCheckedModeBanner: false,
-        home: Home());
+      debugShowCheckedModeBanner: false, 
+      home: Home()
+      );
   }
 }
 
@@ -32,18 +29,26 @@ class _HomeState extends State<Home> {
   dynamic num2 = 0.0;
   String operand = "";
   buttonPressed(String buttonText) {
-    if (buttonText == '<') {
+    if (buttonText == 'AC') {
       _output = "0";
       num1 = 0;
       num2 = 0;
       operand = "";
     } else if (buttonText == '+' ||
         buttonText == '-' ||
-        buttonText == 'X' ||
+        buttonText == 'x' ||
         buttonText == '/') {
       num1 = double.parse(output);
       operand = buttonText;
       _output = "0";
+    } else if (buttonText == '%') {
+      //_output = _output
+    } else if (buttonText == '.') {
+      if (_output.contains(".")) {
+        return;
+      } else {
+        _output = _output + buttonText;
+      }
     } else if (buttonText == '=') {
       num2 = double.parse(output);
       if (operand == '+') {
@@ -52,7 +57,7 @@ class _HomeState extends State<Home> {
       if (operand == '-') {
         _output = (num1 - num2).toString();
       }
-      if (operand == 'X') {
+      if (operand == 'x') {
         _output = (num1 * num2).toString();
       }
       if (operand == '/') {
@@ -75,6 +80,14 @@ class _HomeState extends State<Home> {
         child: Container(
           width: width,
           height: 70,
+          decoration: BoxDecoration(
+            boxShadow: [
+              const BoxShadow(
+                  color: Color(0xff8bcbf6), blurRadius: 2, offset: Offset(1, 2))
+            ],
+            borderRadius: const BorderRadius.all(Radius.circular(2 / 2)),
+          ),
+
           child: Text(buttonText,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -93,7 +106,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NCalculator'),
+        centerTitle: true,
+        title: const Text(
+          'NCalculator',
+          textScaleFactor: 1,
+        ),
       ),
       body: Column(
         children: [
@@ -115,22 +132,11 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildButton("AC", 0xffcdb4db, 70),
+              buildButton("AC", 0xffffffff, 70),
               SizedBox(width: 20),
-              buildButton("%", 0xffcdb4db, 70),
+              buildButton("%", 0xfffffffff, 70),
               SizedBox(width: 20),
-              buildButton("/", 0xffcdb4db, 70),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildButton("4", 0xff000000, 70),
-              SizedBox(width: 20),
-              buildButton("5", 0xff000000, 70),
-              SizedBox(width: 20),
-              buildButton("6", 0xff000000, 70),
+              buildButton("/", 0xffffffff, 70),
             ],
           ),
           SizedBox(height: 10),
@@ -141,35 +147,52 @@ class _HomeState extends State<Home> {
               SizedBox(width: 20),
               buildButton("8", 0xff000000, 70),
               SizedBox(width: 20),
-              buildButton("9", 0xff000000, 70),
+              buildButton("x", 0xffffffff, 70),
             ],
           ),
           SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              buildButton("9", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton("4", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton("-", 0xffffffff, 70),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildButton("5", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton("6", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton("+", 0xffffffff, 70),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildButton("3", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton("2", 0xff000000, 70),
+              SizedBox(width: 20),
+              buildButton(".", 0xffffffff, 70),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildButton("1", 0xff000000, 70),
+              SizedBox(width: 20),
               buildButton("0", 0xff000000, 70),
               SizedBox(width: 20),
-              buildButton("+", 0xff000000, 70),
-              SizedBox(width: 20),
-              buildButton("X", 0xff000000, 70),
+              buildButton("=", 0xff8338ec, 70)
             ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildButton("/", 0xff000000, 70),
-              SizedBox(width: 20),
-              buildButton("<", 0xff000000, 70),
-              SizedBox(width: 20),
-              buildButton("-", 0xff000000, 70),
-            ],
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [buildButton("=", 0xff8338ec, 200)],
           ),
         ],
       ),
